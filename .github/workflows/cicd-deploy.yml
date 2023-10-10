@@ -1,0 +1,31 @@
+name: Unified CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - dev
+    
+
+jobs:
+
+  deploy-to-dev:
+    if: github.ref == 'refs/heads/dev'
+    runs-on: ubuntu-latest
+    steps:
+    ## Step 1
+      - uses: actions/checkout@v3
+    ## Step 2
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@master 
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.SSHKEY_PRIVATE }}
+          script: |
+            cd /var/web/html_new/hospital-laravel
+            sudo chown -Rf nginx:ecom /var/web/html_new/hospital-laravel
+            sudo chmod -Rf 770 /var/web/html_new/hospital-laravel
+            sudo chmod -Rf g+s /var/web/html_new/hospital-laravel
+            sudo chmod +x scripts/cicd_script.sh
+            sudo ./scripts/cicd_script.sh

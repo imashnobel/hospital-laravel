@@ -3,7 +3,7 @@ set -e
 
 echo "Deploying application ...."
 
-pushd /var/web/html_new/hospital-laravel
+pushd /var/web/html_new/cicd/hospital-laravel/
 #sudo rm -rf composer.lock
 
 
